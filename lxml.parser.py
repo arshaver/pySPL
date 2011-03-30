@@ -14,6 +14,7 @@ def get_xml_files(dir):
     return filename_list
 
 #lists full path; NEED trailing slash here
+#this directory contains all of the results of this query: http://labels.fda.gov/getIngredientName.cfm?beginrow=1&numberperpage=2557&searchfield=acetaminophen&OrderBy=IngredientName
 file_list = get_xml_files("/Users/anthonyshaver/Documents/Pharmacy School/apap warfarin interaction project/all_apap_labels/")
 
 
@@ -37,11 +38,13 @@ def get_type(drug):
     return drug_type
 
 #takes file input, not etree
-def check_warfarin(drug):
-    drug = open(drug)
+def check_warfarin(file):
+    drug = open(file)
     for line in drug:
         if ("WARFARIN" in line) or ("warfarin" in line) or ("Warfarin" in line):
+            drug.close()
             return True
+    drug.close()
     return False
 
 # try/except for if drug doesn't have NDC - but they all seem to
@@ -57,15 +60,20 @@ def get_name(drug):
     drug_name = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}name").text
     return drug_name
 
+def get_url(file):
+    file_name = str(file.split("/")[-1]).split(".")[0]
+    url = "http://www.accessdata.fda.gov/spl/data/"+file_name+"/"+file_name+".xml"
+    return url
+    
+    
 #IGNORE; for testing of individual functions with a random individual drug label
 # print get_name(etree.parse("http://www.accessdata.fda.gov/spl/data/787cda7d-7aa4-4909-8e5c-f2fcf68828e4/787cda7d-7aa4-4909-8e5c-f2fcf68828e4.xml"))
 
 with open('output.csv', 'wb') as f:
     writer = csv.writer(f,delimiter="|")
-    writer.writerow(["drug name","date","type","ndc","warfarin mentioned?","#active compounds","file name"])
+    writer.writerow(["drug name","date","type","ndc","warfarin mentioned?","#active compounds","url"])
     for file in file_list:
         xml = etree.parse(file)
-        file_name = str(file.split("/")[-1])
-        writer.writerow([get_name(xml),get_date(xml),get_type(xml),get_ndc(xml),check_warfarin(file),len(get_actives(xml)),file_name])
+        writer.writerow([get_name(xml),get_date(xml),get_type(xml),get_ndc(xml),check_warfarin(file),len(get_actives(xml)),get_url(file)])
 
 f.close()

@@ -13,11 +13,6 @@ def get_xml_files(dir):
             filename_list.append(dir+file)
     return filename_list
 
-#lists full path; NEED trailing slash here
-#this directory contains all of the results (eg the *.xml files) of this query: http://labels.fda.gov/getIngredientName.cfm?beginrow=1&numberperpage=2557&searchfield=acetaminophen&OrderBy=IngredientName
-file_list = get_xml_files("/Users/anthonyshaver/Documents/Pharmacy School/apap warfarin interaction project/all_apap_labels/")
-
-
 def get_actives(drug):
     """returns a python list of all active moieties listed in the file"""
     actives = []
@@ -76,6 +71,11 @@ def get_url(file):
     
 #IGNORE; for testing of individual functions with a random individual drug label
 # print get_name(etree.parse("http://www.accessdata.fda.gov/spl/data/787cda7d-7aa4-4909-8e5c-f2fcf68828e4/787cda7d-7aa4-4909-8e5c-f2fcf68828e4.xml"))
+
+
+#lists full path; NEED trailing slash here
+#this directory contains all of the results (eg the *.xml files) of this query: http://labels.fda.gov/getIngredientName.cfm?beginrow=1&numberperpage=2557&searchfield=acetaminophen&OrderBy=IngredientName
+file_list = get_xml_files("/Users/anthonyshaver/Documents/Pharmacy School/apap warfarin interaction project/all_apap_labels/")
 
 with open('output.csv', 'wb') as f:
     #pipe delimiter is so we can use commas elsewhere; nobody uses pipes and excel/google docs don't care

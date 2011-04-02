@@ -15,7 +15,7 @@ def get_xml_files(dir):
 def get_actives(drug):
     actives = []
     for active in drug.findall("//{urn:hl7-org:v3}activeMoiety/{urn:hl7-org:v3}activeMoiety/{urn:hl7-org:v3}name"):
-        actives.append(active        .text)
+        actives.append(active.text)
     #here converting to a set removes duplicates
     return list(set(actives))
 

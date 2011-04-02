@@ -6,7 +6,6 @@ import csv
 def get_xml_files(dir):
     import os
     filename_list = []
-    
     for file in os.listdir(dir):
         if file.split(".")[-1] == "xml":
             filename_list.append(dir+file)
@@ -15,8 +14,8 @@ def get_xml_files(dir):
 #returns a python list of all active moieties listed in the file
 def get_actives(drug):
     actives = []
-    for item in drug.findall("//{urn:hl7-org:v3}activeMoiety/{urn:hl7-org:v3}activeMoiety/{urn:hl7-org:v3}name"):
-        actives.append(item.text)
+    for active in drug.findall("//{urn:hl7-org:v3}activeMoiety/{urn:hl7-org:v3}activeMoiety/{urn:hl7-org:v3}name"):
+        actives.append(active        .text)
     #here converting to a set removes duplicates
     return list(set(actives))
 
@@ -56,7 +55,7 @@ def get_ndc(drug):
     except:
         return None
 
-#TODO: check to make sure full name is being returned (eg maybe other tags interfering)
+#TODO check to make sure full name is being returned (eg maybe other tags interfering)
 def get_name(drug):
     drug_name = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}name").text
     return drug_name
@@ -73,9 +72,8 @@ def get_url(file):
 # print get_name(etree.parse("http://www.accessdata.fda.gov/spl/data/787cda7d-7aa4-4909-8e5c-f2fcf68828e4/787cda7d-7aa4-4909-8e5c-f2fcf68828e4.xml"))
 
 
-#lists full path; NEED trailing slash here
 #this directory contains all of the results (eg the *.xml files) of this query: http://labels.fda.gov/getIngredientName.cfm?beginrow=1&numberperpage=2557&searchfield=acetaminophen&OrderBy=IngredientName
-file_list = get_xml_files("./all_apap_labels/")
+file_list = get_xml_files("./all_apap_labels/") #need trailing slash
 
 with open('output.csv', 'wb') as f:
     #pipe delimiter is so we can use commas elsewhere; nobody uses pipes and excel/google docs don't care

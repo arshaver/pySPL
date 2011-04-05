@@ -5,4 +5,4 @@ This code is part of a project that I am working on through the University of Wa
 Drug labels in the SPL format can be found at the `FDA Online Label Repository 
 <http://labels.fda.gov/>`_.
 
-Requirements: Python 2.5+ (for the set() function), lxml
+Requirements: Python 2.5+, lxml

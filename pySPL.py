@@ -35,7 +35,7 @@ def get_revision_date(drug):
     day = int(date_string[6:8])
     return date(year,month,day).strftime("%b %d, %Y")
 
-def get_type(drug):
+def get_label_type(drug):
     drug_type = drug.findall("//{urn:hl7-org:v3}code")[0].attrib["displayName"]
     return drug_type
 
@@ -72,7 +72,11 @@ def get_url(file):
     url = "http://www.accessdata.fda.gov/spl/data/"+file_name+"/"+file_name+".xml"
     return url
     
+def get_dosage_form(drug):
+    dosage_form = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}formCode").attrib["displayName"]
+    return dosage_form
     
+
 #IGNORE; for testing of individual functions with a random individual drug label
 # print get_name(etree.parse("http://www.accessdata.fda.gov/spl/data/787cda7d-7aa4-4909-8e5c-f2fcf68828e4/787cda7d-7aa4-4909-8e5c-f2fcf68828e4.xml"))
 
@@ -80,12 +84,13 @@ def get_url(file):
 #this directory contains all of the results (eg the *.xml files) of this query: http://labels.fda.gov/getIngredientName.cfm?beginrow=1&numberperpage=2557&searchfield=acetaminophen&OrderBy=IngredientName
 file_list = get_xml_files("./apap_labels/") #need trailing slash
 
+#this is what I have been using these functions for, modify as necessary depending on which fields need to be included
 with open('output.csv', 'wb') as f:
     #pipe delimiter is so we can use commas elsewhere; nobody uses pipes and excel/google docs don't care
     writer = csv.writer(f,delimiter="|")
-    writer.writerow(["drug name","marketing start date","revision date","type","ndc","warfarin mentioned?","#active compounds","active compounds","url"])
+    writer.writerow(["drug name","marketing start date","revision date","type","ndc","warfarin mentioned?","dosage form","#active compounds","active compounds","url"])
     for file in file_list:
         xml = etree.parse(file)
-        writer.writerow([get_name(xml),get_start_date(xml),get_revision_date(xml),get_type(xml),get_ndc(xml),check_word(file,"warfarin"),len(get_actives(xml)),get_actives(xml),get_url(file)])
+        writer.writerow([get_name(xml),get_start_date(xml),get_revision_date(xml),get_label_type(xml),get_ndc(xml),check_word(file,"warfarin"),get_dosage_form(xml),len(get_actives(xml)),get_actives(xml),get_url(file)])
 
 f.close()

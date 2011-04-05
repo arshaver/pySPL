@@ -31,23 +31,24 @@ def get_label_type(drug):
     drug_type = drug.findall("//{urn:hl7-org:v3}code")[0].attrib["displayName"]
     return drug_type
 
-# try/except for if drug doesn't have NDC - but they all seem to
 def get_ndc(drug):
-    try:
-        ndc = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}code").attrib["code"]
-        return ndc
-    except:
-        return None
+    ndc = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}code").attrib["code"]
+    return ndc
+
 
 #TODO check to make sure full name is being returned (eg maybe other tags interfering)
 def get_name(drug):
     drug_name = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}name").text
     return drug_name
 
+def get_dosage_form(drug):
+    dosage_form = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}formCode").attrib["displayName"]
+    return dosage_form
 
-#the next two functions take file input, not etree
+#the next two functions take file input, not lxml.etree inputs
 
-#Returns True if the string "word", "Word" or "WORD" are found in any line in the file.
+#returns True if the string "word", "Word" or "WORD" are found in any line in the file
+#useful for checking if another drug, such as an interaction, is mentioned
 def check_word(file, word):
     drug = open(file)
     word = str(word).lower()
@@ -63,7 +64,3 @@ def get_url(file):
     #then build the url
     url = "http://www.accessdata.fda.gov/spl/data/"+file_name+"/"+file_name+".xml"
     return url
-    
-def get_dosage_form(drug):
-    dosage_form = drug.find("//{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}manufacturedProduct/{urn:hl7-org:v3}formCode").attrib["displayName"]
-    return dosage_form

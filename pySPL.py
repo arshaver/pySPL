@@ -2,7 +2,6 @@ from lxml import etree
 from datetime import date
 import csv
 
-
 def get_actives(drug):
     """returns a python list of all active moieties listed in the file"""
     actives = []
@@ -53,7 +52,7 @@ def get_dosage_form(drug):
 
 def check_word(file, word):
     """
-    returns True if the string "word", "Word" or "WORD" are found in any line in the file
+    returns True if the string "word" or "Word" or "WORD" is found in any line in the file
     useful for checking if another drug, such as an interaction, is mentioned
     """
     drug = open(file)
@@ -61,6 +60,20 @@ def check_word(file, word):
     for line in drug:
         if (word in line) or (word.capitalize() in line) or (word.upper() in line):
             return True
+            break
+    return False
+
+def get_word_line(file, word):
+    """
+    returns the whitespace-stripped line that contains "word" or "Word" or "WORD"
+    useful for checking if the "word" listing is legitimate for your purposes
+    not that this only displays the first line found containing "word" or "Word" or "WORD"
+    """
+    drug = open(file)
+    word = str(word).lower()
+    for line in drug:
+        if (word in line) or (word.capitalize() in line) or (word.upper() in line):
+            return line.strip()
             break
     return False
 

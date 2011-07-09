@@ -2,6 +2,8 @@ from lxml import etree
 from datetime import date
 import csv
 
+"""contains a suit of functions that take a lxml.etree input drug and return a variety of info about the drug"""
+
 def get_actives(drug):
     """returns a python list of all active moieties listed in the file"""
     actives = []
@@ -11,7 +13,7 @@ def get_actives(drug):
     return list(set(actives))
 
 def get_start_date(drug):
-    """returns start marketing date, a much larger range than get_revision_date() function"""
+    """returns start marketing date as a strftime formatted python date object"""
     date_string = drug.findall("//{urn:hl7-org:v3}effectiveTime/{urn:hl7-org:v3}low")[0].attrib["value"]
     year = int(date_string[0:4])
     month = int(date_string[4:6])

@@ -84,5 +84,5 @@ def get_url(file):
     #first split to get the file name from the whole path, then split to get rid of the .xml
     file_name = str(file.split("/")[-1]).split(".")[0]
     #then build the url
-    url = "http://www.accessdata.fda.gov/spl/data/"+file_name+"/"+file_name+".xml"
+    url = "http://www.accessdata.fda.gov/spl/data/%s/%s.xml" (file_name,file_name)
     return url

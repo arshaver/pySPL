@@ -1,17 +1,5 @@
 from pySPL import *
-
-#gets all XML files from a directory and returns them as a list with full directory
-def get_xml_files(dir):
-    import os
-    filename_list = []
-    for file in os.listdir(dir):
-        if file.split(".")[-1] == "xml":
-            filename_list.append(dir+file)
-    return filename_list
-
-
-#this directory contains all of the results (eg the *.xml files) of this query: http://labels.fda.gov/getIngredientName.cfm?beginrow=1&numberperpage=2557&searchfield=acetaminophen&OrderBy=IngredientName
-file_list = get_xml_files("./apap_labels/") #need trailing slash
+from utils import file_list
 
 #
 with open('output.csv', 'wb') as f:

@@ -67,15 +67,15 @@ class DrugLabel(object):
     def dosage_form(self):
         """returns the drug's dosage form"""
         return self.xml.xpath("//v3:manufacturedProduct/v3:manufacturedProduct/v3:formCode/@displayName",namespaces=namespaces)[0]
-
-    def build_url(self):
-        """helper function that builds and returns the accessdata.fda.gov URL given the XML file name/directory"""
-        #maybe won't work on windows because slash direction?
-        guid = self.label_data.split("/")[-1].split(".")[0]
-        return "http://www.accessdata.fda.gov/spl/data/%s/%s.xml" %(guid,guid)
     
     def check_word(self, word):
         """checks if the xml contains 'word','Word' or 'WORD' and returns True if found or False if not"""
         word = str(word)
         query = "//*[text()[contains(.,'%s') or contains(.,'%s') or contains(.,'%s')]]" %(word.lower(),word.upper(),word.capitalize())
         return True if self.xml.xpath(query,namespaces=namespaces) else False
+
+    def build_url(self):
+        """helper function that builds and returns the accessdata.fda.gov URL given the XML file name/directory"""
+        #maybe won't work on windows because slash direction?
+        guid = self.label_data.split("/")[-1].split(".")[0]
+        return "http://www.accessdata.fda.gov/spl/data/%s/%s.xml" %(guid,guid)

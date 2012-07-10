@@ -47,7 +47,7 @@ with open(filename, 'wb') as f:
 		else:
 			writer.writerow([
 				label.distributor(),
-				label.name().replace("\t","").replace("\n",""),#getting rid of strange \t and \n in a few names
+				label.name(),
 				label.ndc(),
 				label.label_type(),
 				label.dosage_form(),

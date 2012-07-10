@@ -100,7 +100,7 @@ class DrugLabel(object):
 			word_section_list.extend(word.xpath("ancestor::v3:section[1]/v3:code/@displayName",namespaces=namespaces))
 		if not word_section_list:
 			return "n/a"
-		return word_section_list
+		return list(set(word_section_list))
 	
 	def get_word_time(self, word):
 		"""
